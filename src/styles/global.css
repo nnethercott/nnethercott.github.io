@@ -1,0 +1,15 @@
+.header-link {
+  padding-left: 0.1em;
+  padding-right: 0.1em;
+}
+.icon-link {
+  display: inline-block;
+  position: relative;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+.icon-link i {
+  font-size: 0.8em
+}
+

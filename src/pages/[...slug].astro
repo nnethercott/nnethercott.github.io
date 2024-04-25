@@ -1,15 +1,26 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
 import BlogPost from "../layouts/BlogPost.astro";
+import CodePost from "../layouts/CodePost.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
-  return posts.map((post) => ({
+
+  const blogPosts = await getCollection("blog");
+  const codePosts = await getCollection("code");
+
+  const blogPaths = blogPosts.map((post) => ({
     params: { slug: post.slug },
     props: post,
   }));
+  const codePaths = codePosts.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
+
+  return [...blogPaths, ...codePaths]
 }
-type Props = CollectionEntry<"blog">;
+
+type Props = CollectionEntry<"blog"> | CollectionEntry<"code">
 
 const post = Astro.props;
 const { Content } = await post.render();
