@@ -2,6 +2,7 @@
   padding-left: 0.1em;
   padding-right: 0.1em;
 }
+
 .icon-link {
   display: inline-block;
   position: relative;
@@ -13,20 +14,41 @@
   font-size: 0.8em
 }
 
-.article-read{
+.article-read {
   font-weight: 500;
   color: #1770fc;
 }
 
-.article-read i{
+.article-read:hover {
+  color: #5999ff;
+}
+
+.article-read i {
   font-size: 0.9em;
 }
 
-.article hr{
+.article hr {
   height: 1px
 }
 
-.article a{
+.article a {
   text-decoration: none;
   color: #1770fc;
+}
+
+.article a:hover {
+  color: #5999ff;
+}
+
+.tags {
+  font-size: 0.70em;
+  font-weight: 625;
+}
+
+.tags a {
+  padding-right: 0.65em;
+}
+
+.tags a:hover {
+  text-decoration: underline;
 }

@@ -28,8 +28,6 @@ $$
 
 Our goal is to have a VAE that learns how to encode and decode samples in a sparse fashion. Sparse representations - or ones where a lot of information can be "zeroed out" - are nice mathematically and in a sec we'll see what that looks like with the MNIST dataset.
 
-
-
 We'll also assume $$z_{i}|x \sim \mathcal{N}(\mu_{\phi}(x), \sigma^{2}_{\phi}(x))$$ 
 and that $$x_{i}|z \sim Be(\theta(z))$$.
 That last choice is mainly since I'm going to show some examples using grayscale images and we want our generated outputs being a value truncated between 0 and 1.  
@@ -55,7 +53,10 @@ $$
 \end{align*}
 $$
 
-So we're looking to minimize the binary cross entropy pixel-wise across the image. Using PyTorch we can easily implement everything we were just talking about.  
+So we're looking to minimize the binary cross entropy pixel-wise across the image. 
+
+## Code  
+Using PyTorch we can easily implement everything we were just talking about.  
 
 First let's handle the distributional aspects:
 
@@ -121,7 +122,7 @@ With everything in place we can train the model quickly and visualize the result
 <div style="text-align: center;">
     <img src="https://github.com/nnethercott/_nnethercott.github.io/blob/master/assets/img/nate/blog/sparse_recon.png?raw=true" style="width: 100%; display: block; margin: 0 auto;">
 </div>
-<em>Reconstructions for a VAE with spike and slab prior; latent_dim=10, p=0.8, c^2 = 0.05</em>
+<em>Generations for a VAE with spike and slab prior; latent_dim=10, p=0.8, c^2 = 0.05</em>
 
 The interesting part of the embeddings here is that we have a fraction of the latents which are essentially zero, this being a direct consequence of the penalization term we imposed with our sparsity promoting prior.  I've added another plot right below this to illustrate what I mean.
 
@@ -162,7 +163,7 @@ $$
 $$
 
 
-Now by Jensen's inequality (just geometry!) you arrive at a lower bound on the likelihood of a sample under our variational autoencoder given by the [evidence lower bound (ELBO)](https://en.wikipedia.org/wiki/Evidence_lower_bound). 
+Now by Jensen's inequality (just geometry!) you arrive at a lower bound on the likelihood of a sample under our variational autoencoder given by the <a href="https://en.wikipedia.org/wiki/Evidence_lower_bound" style="text-decoration:none;color:#1770fc">evidence lower bound</a>. 
 
 $$
 \begin{align*}

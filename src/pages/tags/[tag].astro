@@ -1,17 +1,25 @@
-
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import Layout from '../../layouts/BlogPost.astro';
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
 import { getCollection } from "astro:content";
-import FormattedDate from "../components/FormattedDate.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
 
-const posts = (await getCollection("code")).sort(
+export async function getStaticPaths() {
+  return [
+    { params: { tag: "rust" } },
+    { params: { tag: "python" } },
+  ];
+}
+
+const { tag } = Astro.params;
+const _posts = (await getCollection("code")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
+const posts = _posts.filter((post) => post.data.tags?.includes(tag));
 ---
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -21,13 +29,13 @@ const posts = (await getCollection("code")).sort(
     <Header />
     <main>
       <section>
-        <ul>
+      <ul>
           {
             posts.map((post) => (
               <li class="mb-8">
                 <div class="tags">
                   {post.data.tags && post.data.tags.map(tag => (
-                    <a href=`/tags/${tag}/`>#{tag}</a>
+                    <a href=`/tags/${tag}`>#{tag}</a>
                   ))}
                 </div>
                 <a href={`/code/${post.slug}/`}>
@@ -48,4 +56,3 @@ const posts = (await getCollection("code")).sort(
     <Footer />
   </body>
 </html>
-

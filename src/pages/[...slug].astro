@@ -13,7 +13,7 @@ export async function getStaticPaths() {
     props: post,
   }));
   const codePaths = codePosts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: `code/${post.slug}` },
     props: post,
   }));
 
@@ -24,8 +24,15 @@ type Props = CollectionEntry<"blog"> | CollectionEntry<"code">
 
 const post = Astro.props;
 const { Content } = await post.render();
+const isBlogPost = post.type === "blog";
 ---
 
-<BlogPost {...post.data}>
-  <Content />
-</BlogPost>
+{isBlogPost ? (
+  <BlogPost {...post.data}>
+    <Content />
+  </BlogPost>
+) : (
+  <CodePost {...post.data}>
+    <Content />
+  </CodePost>
+)}
