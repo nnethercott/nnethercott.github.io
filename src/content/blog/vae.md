@@ -8,7 +8,7 @@ pubDate: 'Apr 10 2023'
     <img src="https://github.com/nnethercott/_nnethercott.github.io/blob/master/assets/img/nate/blog/mnist.gif?raw=true" style="width: 50%; display: block; margin: 0 auto;">
 </div>
 
-**TLDR:** I used a <a href="https://en.wikipedia.org/wiki/Spike-and-slab_regression"  style="text-decoration:none;color:#1770fc">spike-and-slab</a> prior instead of the unit gaussian to model the latent distribution. Training a VAE this way results in an sparse embedding space where only a few components are non-zero.
+**TLDR:** I used a <a href="https://en.wikipedia.org/wiki/Spike-and-slab_regression"  style="text-decoration:none;color:#1770fc">spike-and-slab</a> prior instead of the unit gaussian to model the latent distribution of a variational autoencoder. Training a VAE this way results in an sparse embedding space where only a few components are non-zero.
 
 
 ## Theory 
