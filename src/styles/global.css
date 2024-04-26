@@ -13,3 +13,20 @@
   font-size: 0.8em
 }
 
+.article-read{
+  font-weight: 500;
+  color: #1770fc;
+}
+
+.article-read i{
+  font-size: 0.9em;
+}
+
+.article hr{
+  height: 1px
+}
+
+.article a{
+  text-decoration: none;
+  color: #1770fc;
+}

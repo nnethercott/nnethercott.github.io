@@ -30,6 +30,9 @@ const posts = (await getCollection("blog")).sort(
                   </h1>
                 </a>
                 <p class="mb-2 text-gray-600">{post.data.description}</p>
+                <a href={`/${post.slug}/`}>
+                  <h2 class = "article-read">Read this article <i class="fa-solid fa-arrow-right"></i></h2>
+                  </a>
               </li>
             ))
           }

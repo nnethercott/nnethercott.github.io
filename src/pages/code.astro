@@ -1,3 +1,4 @@
+
 ---
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
@@ -24,12 +25,15 @@ const posts = (await getCollection("code")).sort(
           {
             posts.map((post) => (
               <li class="mb-8">
-                <a href={`${post.slug}/`}>
+                <a href={`/${post.slug}/`}>
                   <h1 class="text-xl font-bold hover:underline">
                     {post.data.title}
                   </h1>
                 </a>
                 <p class="mb-2 text-gray-600">{post.data.description}</p>
+                <a href={`/${post.slug}/`}>
+                  <h2 class = "article-read">Read this article <i class="fa-solid fa-arrow-right"></i></h2>
+                  </a>
               </li>
             ))
           }
@@ -39,3 +43,4 @@ const posts = (await getCollection("code")).sort(
     <Footer />
   </body>
 </html>
+
