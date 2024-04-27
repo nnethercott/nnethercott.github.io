@@ -24,15 +24,8 @@ type Props = CollectionEntry<"blog"> | CollectionEntry<"code">
 
 const post = Astro.props;
 const { Content } = await post.render();
-const isBlogPost = post.type === "blog";
 ---
 
-{isBlogPost ? (
-  <BlogPost {...post.data}>
-    <Content />
-  </BlogPost>
-) : (
-  <CodePost {...post.data}>
-    <Content />
-  </CodePost>
-)}
+<BlogPost {...post.data}>
+  <Content />
+</BlogPost>
