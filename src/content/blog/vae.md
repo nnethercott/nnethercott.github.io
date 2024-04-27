@@ -17,7 +17,7 @@ Before diving into it, I thought I'd mention that I've included a quick refreshe
 
 The main idea is to assume a prior on the latent space where each latent, $$z_{i}$$,
 of the encoded sample, $$x$$, has some probability, $$p$$
- of being turned "on" or "off". For $$c\in \mathbb{R}$$, $$|c|<1$$ we have
+ of being turned "on" or "off". For $$c\in \mathbb{R}$$, $$|c|<1$$ we have for each dimension
 
 $$
 \begin{align*}
@@ -26,7 +26,7 @@ z_{i} | \gamma_{i} &\sim (1-\gamma_{i})\cdot \mathcal{N}(0, c^{2}) + \gamma_{i}\
 \end{align*}
 $$
 
-Our goal is to have a VAE that learns how to encode and decode samples in a sparse fashion. Sparse representations - or ones where a lot of information can be "zeroed out" - are nice mathematically and in a sec we'll see what that looks like with the MNIST dataset.
+Our goal is to have a VAE that learns how to encode and decode samples in a sparse fashion. Sparse representations - or ones where a lot of information can be "zeroed out" - are nice mathematically and in a sec we'll see what that looks like with the MNIST dataset. Note that we can throttle the sparsity through our choice of $$p$$, where $$p$$ close to one means most of the embedding dimensions are uninformative.
 
 We'll also assume $$z_{i}|x \sim \mathcal{N}(\mu_{\phi}(x), \sigma^{2}_{\phi}(x))$$ 
 and that $$x_{i}|z \sim Be(\theta(z))$$.
