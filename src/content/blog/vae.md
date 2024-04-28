@@ -203,3 +203,7 @@ $$
 So that maximizing this term is equivalent to minimizing the reconstruction loss.
 
 By mixing and matching which probibalisitc frameworks you're operating with for the encoder prior and posterior, and decoder posterior, the form of the ELBO changes accordingly. 
+
+## References 
+* [Auto-Encoding Variational Bayes](https://arxiv.org/abs/2106.09685) by Kingma et al. (2013)
+* [beta-VAE: Learning Basic Visual Concepts with a Constrained Variational Framework](https://openreview.net/forum?id=Sy2fzU9gl) by Higgins et al. (2022)

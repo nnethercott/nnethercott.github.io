@@ -4,7 +4,7 @@ description: 'Practicing computer vision algorithms in rust.'
 pubDate: 'Apr 22 2024'
 tags: ["rust", "python"]
 ---
-I've been using the <a href="https://learnopencv.com/non-maximum-suppression-theory-and-implementation-in-pytorch/" style="color:#1770fc; text-decoration:none">NMS algorithm</a> for some time now as a post-processing step in detection models without ever thinking about it. I like understanding all the tools I use, so I throught it would be fun to try to implement the algo by hand to make sure I fully grasped the idea. Around this time I also happened to be learning Rust so I figured I could kill two birds with one stone.
+I've been using the <a href="https://learnopencv.com/non-maximum-suppression-theory-and-implementation-in-pytorch/">NMS algorithm</a> for some time now as a post-processing step in detection models without ever thinking about it. I like understanding all the tools I use, so I throught it would be fun to try to implement the algo by hand to make sure I fully grasped the idea. Around this time I also happened to be learning Rust so I figured I could kill two birds with one stone.
 
 The parts I'm going to tackle in this post are:
 * artificial data generation 
@@ -80,9 +80,9 @@ pub mod utils {
 }
 ```
 
-I chose to not include the box score as a field in the `BBox` struct to keep the interface similar to <a href="https://pytorch.org/vision/main/generated/torchvision.ops.nms.html" style="color:#1770fc;text-decoration:None;">PyTorch's</a> which is important for consistency when we compare the two later as certain sorting ops add overhead that should be consistent across tests.
+I chose to not include the box score as a field in the `BBox` struct to keep the interface similar to <a href="https://pytorch.org/vision/main/generated/torchvision.ops.nms.html">PyTorch's</a> which is important for consistency when we compare the two later as certain sorting ops add overhead that should be consistent across tests.
 
-To serialize and deserialize the resulting vector of `BBox` objects we add `serde` and `serde_json` to our dependencies. From what I learned, <a href = "https://serde.rs/" style="color:#1770fc;text-decoration:None;">Serde</a> is the defacto crate for dealing with json and other structured data serialization in Rust. 
+To serialize and deserialize the resulting vector of `BBox` objects we add `serde` and `serde_json` to our dependencies. From what I learned, <a href = "https://serde.rs/">Serde</a> is the defacto crate for dealing with json and other structured data serialization in Rust. 
 
 I also learned while doing this that the `BufWriter` lets you avoid creating a copy of your data in-memory as opposed to doing something like `serde_json::to_string(boxes)?` and a file write on the JSON string. In our case the data we're dealing with isn't big enough to worry about this, but its still nice to know. 
 
