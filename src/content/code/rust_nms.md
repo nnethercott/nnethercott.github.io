@@ -159,7 +159,7 @@ pub fn nms(boxes: &mut Vec<BBox>, scores: &Vec<f32>, iou_threshold: f32) -> Vec<
 }
 ```
 ## Results  
-Let's actually run the code and time it with a `main.rs` that looks like 
+Let's actually run the code and time it with the `main.rs` as shown below:
 
 ```rust 
 //main.rs 
@@ -215,4 +215,4 @@ print(f"filtered down to {len(nms_res)} in {1e3*(stop-start)} milliseconds")
 ```
 
 
-For thorough benchmarking we should measure multiple times and average, but for a quick check its reassuring to see that the implementation in Rust is on the same magnitude in terms of compute time.
+For thorough benchmarking we should measure multiple times and average, but for a quick check its reassuring to see that the implementation in Rust is on the same magnitude in terms of compute time and that we get the same answer. 

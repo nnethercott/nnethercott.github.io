@@ -8,7 +8,7 @@ pubDate: 'Apr 10 2023'
     <img src="https://github.com/nnethercott/_nnethercott.github.io/blob/master/assets/img/nate/blog/mnist.gif?raw=true" style="width: 50%; display: block; margin: 0 auto;">
 </div>
 
-**TLDR:** I used a <a href="https://en.wikipedia.org/wiki/Spike-and-slab_regression"  style="text-decoration:none;color:#1770fc">spike-and-slab</a> prior instead of the unit gaussian to model the latent distribution of a variational autoencoder. Training a VAE this way results in an sparse embedding space where only a few components are non-zero.
+**TLDR:** I used a <a href="https://en.wikipedia.org/wiki/Spike-and-slab_regression">spike-and-slab</a> prior instead of the unit gaussian to model the latent distribution of a variational autoencoder. 
 
 
 ## Theory 
@@ -34,7 +34,7 @@ That last choice is mainly since I'm going to show some examples using grayscale
 
 <!-- Notice that $$p(z_{i}) = \int p(z_{i}, \gamma_{i})p(d\gamma_{i}) = (1-p)\cdot \varphi(x;0,c^{2}) + p\cdot \varphi(x;0,1)$$. -->
 
-Okay so here's the bad news: unfortunately no closed form for the KL-divergence between our mixture model prior and the posterior exists. The good news: we can just estimate the KL loss through <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method" style="text-decoration:none;color:#1770fc">Monte Carlo</a> pretty easily:
+Okay so here's the bad news: unfortunately no closed form for the KL-divergence between our mixture model prior and the posterior exists. The good news: we can just estimate the KL loss through <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method">Monte Carlo</a> pretty easily:
 
 $$
 \begin{align*}
@@ -56,7 +56,7 @@ $$
 So we're looking to minimize the binary cross entropy pixel-wise across the image. 
 
 ## Code  
-Using PyTorch we can easily implement everything we were just talking about.  
+Using PyTorch and torch.distributions we can easily implement everything we were just talking about.  
 
 First let's handle the distributional aspects:
 
@@ -91,7 +91,7 @@ def kl_divergence(q, p, k=10):
     return torch.mean(q.log_prob(samples) - p.log_prob(samples))
 ```
 
-Now for the loss terms...
+Now for the loss terms:
 ```python
 
 mu, log_var = vae_model.encoder(x)
@@ -115,21 +115,23 @@ kl = kl_divergence(pz_x, pz,k=10)
 #total loss
 loss = recon + kl 
 ```
-I've left out the architectures for the encoder and decoder but since the MNIST dataset is fairly simple most choices will do. Notice also that we made use of the <a href ="https://en.wikipedia.org/wiki/LogSumExp" style="text-decoration:none;color:#1770fc">LogSumExp trick</a> to handle computing the log probabilities under the spike and slab prior. 
+I've left out the architectures for the encoder and decoder but since the MNIST dataset is fairly simple most choices will do. Notice also that we made use of the <a href ="https://en.wikipedia.org/wiki/LogSumExp">LogSumExp trick</a> to handle computing the log probabilities under the spike and slab prior. 
 
-With everything in place we can train the model quickly and visualize the resulting embedding space. I've left out the training details since this is more a post on the statistics side, but its in line with most tutorials out there.  Of course this article wouldn't be complete without showing a few generations...
+With everything in place we can train the model quickly and visualize the resulting embedding space. I've left out the training details since this is more a post on the statistics side, but its in line with most tutorials out there.  
+
+When you train the model you still get a VAE which can produce realistic generations like the ones below, even if we're using a lossy encoder.  
 
 <div style="text-align: center;">
     <img src="https://github.com/nnethercott/_nnethercott.github.io/blob/master/assets/img/nate/blog/sparse_recon.png?raw=true" style="width: 100%; display: block; margin: 0 auto;">
 </div>
 <em>Generations for a VAE with spike and slab prior; latent_dim=10, p=0.8, c^2 = 0.05</em>
 
-The interesting part of the embeddings here is that we have a fraction of the latents which are essentially zero, this being a direct consequence of the penalization term we imposed with our sparsity promoting prior.  I've added another plot right below this to illustrate what I mean.
+What's different about this model and the normal VAE is that when we encode images we only have a few non-zero components in the embedding representation.  If the embedding space is $$d$$-dimensional we expect the model to activate only $$p*d$$ dimensions after training, which we can see by looking at the image below:
 
 <div style="text-align: center;">
     <img src="https://github.com/nnethercott/_nnethercott.github.io/blob/master/assets/img/nate/blog/latent_vis.png?raw=true" style="width: 100%; display: block; margin: 0 auto;">
 </div>
-<em>Each subplot visualizes the latent representation for a sample image under our VAE framework. 
+<em>Each subplot shows the latent representation for a different sample image using the trained model. 
 </em>
 
 There you go! A sparse variational autoencoder which was obtained just from making a few different choices in the statistical scaffolding of the model. I should also note that spike and slab and normal of course aren't the only choices when designing your VAEs (personal fave of mine is Gumbel Softmax). 
@@ -163,7 +165,7 @@ $$
 $$
 
 
-Now by Jensen's inequality (just geometry!) you arrive at a lower bound on the likelihood of a sample under our variational autoencoder given by the <a href="https://en.wikipedia.org/wiki/Evidence_lower_bound" style="text-decoration:none;color:#1770fc">evidence lower bound</a>. 
+Now by Jensen's inequality (just geometry!) you arrive at a lower bound on the likelihood of a sample under our variational autoencoder given by the <a href="https://en.wikipedia.org/wiki/Evidence_lower_bound">evidence lower bound</a>. 
 
 $$
 \begin{align*}
