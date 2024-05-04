@@ -2,6 +2,7 @@
 title: 'Training LLaVA on GPT-4 annotated data'
 description: 'I used the AI to train the AI'
 pubDate: 'Mar 20 2024'
+tags: ["python"]
 ---
 **TLDR:** I trained LLaVA v1.5 7b on a dataset of OCR-aware image captions produced by GPT-4 to improve the base model's OCR capabilities. With quantization we reduce the model size from 14GB to 4.5GB and accelerate inference by 4x without losing performance.
 <div style="text-align: center;">
