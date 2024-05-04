@@ -399,6 +399,25 @@ services:
 ```
 `PYTHONUNBUFFERED=1` is just there so any print statements from within the flask app show up on our console.  
 
+The Dockerfile for the `worker` service looks like:
+```dockerfile 
+FROM python:3.10-bookworm
+
+WORKDIR /app
+
+RUN pip install -U pip &&\
+    pip install torch torchvision  --index-url https://download.pytorch.org/whl/cpu --no-cache-dir
+
+COPY ./requirements.txt .
+
+RUN pip install -r requirements.txt --no-cache-dir 
+
+COPY . .
+
+CMD ["python", "app.py"]
+
+```
+
 ## References 
 * [Phi-3 Technical Report: A Highly Capable Language Model Locally on Your Phone](https://arxiv.org/abs/2404.14219) by Abdin et al.
 * [Accelerating-Phi-3](https://onnxruntime.ai/blogs/accelerating-phi-3) ONNX Runtime blog post 
