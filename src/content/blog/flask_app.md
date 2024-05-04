@@ -10,7 +10,7 @@ tags: ["python", "flask"]
 
 [Phi-3](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct) is the most recent LLM release from Microsoft. In this version the creators chose to use similar blocks to Llama2 so that it could integrate seamlessly into existing frameworks and also kept it small enough (3.8b params) to be feasible to run on consumer CPUs while still outperforming models twice its size. 
 
-In this article I'm going to be running through how I setup a minimal REST API to serve Phi-3 on my MacBook Air, and I'll be sharing some stuff I learned along the way. The code for this article can be found in [this repo](https://github.com/nnethercott/phi3-rest-api). 
+In this article I'm going to be running through how I setup a minimal REST API to serve Phi-3 on my MacBook Air, and I'll be sharing some stuff I learned along the way. The code for this article can be found in [this repo](https://github.com/nnethercott/simple-ml-api). 
 
 ## Technology 
 Here's a quick overview of the frameworks and projects I explored and used to bring the project to life:
@@ -30,7 +30,7 @@ There's already a lot of projects out there which streamline building APIs with 
 
 The API will consist of one chat endpoint (`/chat/completions`) supporting GET and POST requests. POST requests are how we perform inference with the hosted LLM while the GET route handler will render the conversation history. We'll also make use of Redis to cache the outputs of expensive API calls. 
 
-Setup your virtual environment and install the dependencies as below. Note: all the dependencies for each step in the build can be found in the repo's [requirements.txt](https://github.com/nnethercott/phi3-rest-api/blob/main/requirements.txt) file. 
+Setup your virtual environment and install the dependencies as below. Note: all the dependencies for each step in the build can be found in the repo's [requirements.txt](https://github.com/nnethercott/simple-ml-api/blob/main/requirements.txt) file. 
 
 ```bash
 python -m venv venv 
