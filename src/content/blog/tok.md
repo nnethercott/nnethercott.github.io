@@ -5,7 +5,7 @@ pubDate: 'May 10 2024'
 tags: ["rust", "python"]
 ---
 
-**TLDR:** I implempented a BPE tokenizer using Rust which is 4x faster than equivalent tokenizers from the 🤗 library and on par with OpenAI's. 
+**TLDR:** I implempented a BPE tokenizer using Rust and pyo3 which is 4x faster than equivalent tokenizers from the 🤗 library and on par with OpenAI. 
 
 <figure>
 <div style="text-align: center;">
