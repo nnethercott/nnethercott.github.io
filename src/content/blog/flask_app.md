@@ -12,7 +12,7 @@ tags: ["python", "flask"]
 
 In this article I'm going to be running through how I setup a minimal REST API to serve Phi-3 on my MacBook Air, and I'll be sharing some stuff I learned along the way. The code for this article can be found in [this repo](https://github.com/nnethercott/simple-ml-api). 
 
-## Technology 
+## The Stack
 Here's a quick overview of the frameworks and projects I explored and used to bring the project to life:
 * [flask](https://flask.palletsprojects.com/en/3.0.x/quickstart/) 
 * [redis](https://redis.io/)
