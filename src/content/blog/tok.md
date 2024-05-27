@@ -1,28 +1,30 @@
 ---
-title: 'Making tokenizers faster with rust'
-description: 'Playing around with python bindings in rust'
-pubDate: 'May 10 2024'
+title: "Making tokenizers faster with rust"
+description: "Playing around with python bindings in rust"
+pubDate: "May 10 2024"
 tags: ["rust", "python"]
 ---
 
-**TLDR:** I implempented a BPE tokenizer using Rust and pyo3 which is 4x faster than equivalent tokenizers from the 🤗 library and on par with OpenAI. 
+**TLDR:** I implempented a BPE tokenizer using Rust and pyo3 which is 4x faster than tokenizers from 🤗 and as fast as OpenAI.
 
 <figure>
 <div style="text-align: center;">
-    <img src="https://github.com/nnethercott/toktokenizer/raw/main/performance.png" style="width: 80%; display: block; margin: 0 auto;" >
+    <img src="https://github.com/nnethercott/tok/raw/main/performance.png" style="width: 80%; display: block; margin: 0 auto;" >
       <figcaption>Speed comparison between my tokenizer (yellow) and popular libraries like Hugging Face and OpenAI</figcaption>
 </div>
 </figure>
 
 <!-- Right off the bat, _yes_, this is another post about Rust and ML. More specifically though, it's about -->
-In this article I'll run through how I used Rust and [pyo3](https://github.com/PyO3/pyo3) to implement a semi-fast BPE tokenizer which you can install from PyPI today!  
 
-All the code mentioned in this post can be found on github [at this repo 🪙](https://github.com/nnethercott/toktokenizer).
+In this article I'll run through how I used Rust and [pyo3](https://github.com/PyO3/pyo3) to implement a fast BPE tokenizer which you can install from PyPI today!
+
+All the code mentioned in this post can be found on github [at this repo 🪙](https://github.com/nnethercott/tok).
 
 _⚠️Disclaimer⚠️_ This article is mainly about an efficient way I discovered to quickly encode and decode sequences using a pretrained tokenizer instead of an in-depth review of byte-pair encoding. For a thorough review of BPE check out any one of these links:
-* [wikipedia](https://en.wikipedia.org/wiki/Byte_pair_encoding)
-* [hugging face](https://huggingface.co/learn/nlp-course/en/chapter6/5)
-* [tiktoken readme](https://github.com/openai/tiktoken)
+
+- [wikipedia](https://en.wikipedia.org/wiki/Byte_pair_encoding)
+- [hugging face](https://huggingface.co/learn/nlp-course/en/chapter6/5)
+- [tiktoken readme](https://github.com/openai/tiktoken)
 
 <!-- I figured it would be fun to manually implement the building blocks of modern NLP from scratch, and with that said there's no better place to start than with the tokenizer. To that end, I turned to Rust as my language of choice to  -->
 
@@ -38,15 +40,18 @@ _⚠️Disclaimer⚠️_ This article is mainly about an efficient way I discove
 
 <!-- The "easiest" BPE tokenizer to train is one where we start with numbers 0->255 and build up the vocabulary from there! This saves us from the headache of defining rules for splitting strings into characters, or the type of preprocessing we perform. -->
 
-## Fast encoding algorithm 
+## Fast encoding algorithm
+
 Suppose you've already trained your tokenizer, i.e. you have a hashmap that lets you map sequences of bytes to unique tokens. What's the fastest way to use this lookup table to encode and decode your data?
 
-### A basic approach
+<!-- ### A basic approach -->
+
 The first idea that comes to mind might be to loop over all the possible token merges in the order we learned them and replace any matches we find along the way. For example, if your tokenizer has the following token mapping rules:
 
 ```
 {(97, 97): 256, (256,97): 257, (257, 98): 258}
 ```
+
 Then the encoding for "aaabcaaab" (or [97,97,97,98,99,97,97,97,98] as a byte array) would go sequentially like:
 
 ```
@@ -54,10 +59,12 @@ Then the encoding for "aaabcaaab" (or [97,97,97,98,99,97,97,97,98] as a byte arr
 2. [256,97,98,99,256,97,98] -> [257,98,99,257,98]
 3. [257,98,99,257,98] -> [258,99,258]
 ```
+
 In Rust that procedure can be written as below:
-```rust 
-use std::collections::HashMap; 
-type Rank = u32; 
+
+```rust
+use std::collections::HashMap;
+type Rank = u32;
 
 fn _byte_pair_merge(pieces: &mut Vec<Rank>, pair: (Rank, Rank), replace: Rank) {
     let mut i = 0;
@@ -75,7 +82,7 @@ fn encode(text: &str, map: &HashMap<(Rank,Rank), Rank>) -> Vec<Rank>{
                             .iter()
                             .map(|&x| x as Rank)
                             .collect();
-  //reverse (k,v) to (v,k) 
+  //reverse (k,v) to (v,k)
   let reverse_map: HashMap<Rank, (Rank, Rank)> = map.iter()
                                       .map(|(&p, &r)| (r, p))
                                       .collect();
@@ -95,11 +102,13 @@ For a vocabulary size of 50257, the token throughput with this approach for a 2.
 
 This approach definitely gets the job done but it's incredibly inefficient! Indeed, this solution has a time complexity of $$O(mn)$$, where $$m$$ is the vocab size and $$n$$ is the length of the text you want to encode. As the vocabulary size and/or length of the text increase we get significant slowdowns :(
 
-### A more efficient solution! 
+<!-- ### A more efficient solution!  -->
 
-The approach I ended up stumbling across after around 6 hours of refactoring is closer to $$O(m\log{n})$$. It relies on the fact that we don't need to loop over every entry in the hashmap when it's sufficient to notice that we can apply merges in a way which respects the order the tokenizer learned them in. This lets us apply multiple different token merges in a single pass instead of only searching for a single pattern each time. Additionally, we can detect early on if no more token merging is possible and break out of the function.
+_A more efficient solution incoming..._
 
-```rust 
+The approach I ended up stumbling across after around 6 hours of refactoring is closer to $$O(m\log{n})$$. It relies on the fact that we don't need to loop over every entry in the hashmap when it's sufficient to notice that we can apply merges in a way which respects the order the tokenizer learned them in. This lets us apply multiple different token merges in a single pass instead of only searching for a single pattern each time. We can also detect early on if no more token merging is possible and break out of the function.
+
+```rust
 //lib.rs
 fn encode(text: &str, map: Map<(Rank,Rank), Rank>) -> Vec<Rank> {
     let mut pieces: Vec<Rank> = text.as_bytes().iter().map(|&x| x as Rank).collect();
@@ -147,25 +156,26 @@ fn encode(text: &str, map: Map<(Rank,Rank), Rank>) -> Vec<Rank> {
     pieces
 }
 ```
-On the same wikitext split our throughput using this encoding algorithm jumps to **24.35MB/s**. That's over a 1000x improvement with respect to where we started from. 
+
+On the same wikitext split our throughput using this encoding algorithm jumps to **24.35MB/s**. That's over a 100x improvement with respect to where we started from.
 
 I took a lot of inspiration from official [openai implementation](https://github.com/openai/tiktoken/blob/main/src/lib.rs) in their repo `tiktoken` but handled the merging aspect quite differently by leveraging the fact that we could store the prospective merges in a stack instead of finding the single-best merge at each iteration.
 
+## PyO3 and the toktokenizer package
 
-## PyO3 and the toktokenizer package 
-To expose the Rust code in Python I made use of [pyo3](https://github.com/PyO3/pyo3) and [maturin](https://github.com/PyO3/maturin). Getting started with these libraries is incredibly easy and just requires adding a few pyo3 attributes to your existing rust code. What's also nice is that maturin automatically adds a CI github workflow to your project which makes distributing your python package infinitely easier. By default the workflow listens for new tag pushes to the main branch and builds the wheels for all the major platforms. 
+To expose the Rust code in Python I made use of [pyo3](https://github.com/PyO3/pyo3) and [maturin](https://github.com/PyO3/maturin). Getting started with these libraries is incredibly easy and just requires adding a few pyo3 attributes to your existing rust code. What's also nice is that maturin automatically adds a CI github workflow to your project which makes distributing your python package infinitely easier. By default the workflow listens for new tag pushes to the main branch and builds the wheels for all the major platforms.
 
-I encourage you to check out [a few official examples](https://github.com/PyO3/setuptools-rust/tree/main/examples) and the [pyo3 docs](https://pyo3.rs/v0.21.2/), overall though its a pretty frictionless experience. 
+I encourage you to check out [a few official examples](https://github.com/PyO3/setuptools-rust/tree/main/examples) and the [pyo3 docs](https://pyo3.rs/v0.21.2/), overall though its a pretty frictionless experience.
 
 Using maturin I published `toktokenizer` - a lightweight python package for BPE tokenizers - to PyPI. The only class the library exposes is `BPETokenizer`. The class itself is pretty minimalistic, with all major methods being showed below:
 
-```python 
+```python
 # demo.py
 from toktokenizer import BPETokenizer
 
 bpe = tok.BPETokenizer()
 
-# train a byte-pair tokenizer on some corpus 
+# train a byte-pair tokenizer on some corpus
 train_corpus = "this is some training data"
 vocab_size = 8
 bpe.train(train_corpus, vocab_size)
@@ -173,7 +183,7 @@ bpe.train(train_corpus, vocab_size)
 # save tokenizer state
 bpe.save_encoder("8word.json")
 
-# load tokenizer from dumped file 
+# load tokenizer from dumped file
 bpe.load_encoder("8word.json")
 
 # encode and decode
@@ -182,8 +192,10 @@ decoded = bpe.decode(input_ids)
 ```
 
 To get started with `toktokenizer` today you can install it with pip as follows:
+
 ```
 pip install toktokenizer
 ```
 
 I'm looking forward to using this library moving forwards as I build up various components of modern NLP models from scratch!
+
