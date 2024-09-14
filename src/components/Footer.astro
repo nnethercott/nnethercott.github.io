@@ -1,12 +1,13 @@
 ---
 const today = new Date();
+import { PAGE_WIDTH } from '../consts';
 ---
 
-
-<footer class="flex flex-row justify-between text-xs my-16">
-  &copy; {today.getFullYear()} Nate Nethercott
-  <div class="social-links">
+<footer class="flex flex-row justify-between text-xs my-16 mx-auto mx-auto w-full md:w-1/2 px-4">
+  <span>&copy; {today.getFullYear()} Nate Nethercott</span>
+  <div class="social-links flex gap-4">
     <a href="https://github.com/nnethercott" target="_blank" class="icon-link">GitHub <i class="fa-solid fa-up-right-from-square"></i></a>
     <a href="https://huggingface.co/nnethercott" target="_blank" class="icon-link">HuggingFace <i class="fa-solid fa-up-right-from-square"></i></a>
   </div>
 </footer>
+

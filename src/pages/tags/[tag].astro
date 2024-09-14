@@ -6,6 +6,7 @@ import Footer from "../../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
 import { getCollection } from "astro:content";
 import FormattedDate from "../../components/FormattedDate.astro";
+import { PAGE_WIDTH } from '../../consts';
 
 export async function getStaticPaths() {
   return [
@@ -14,31 +15,38 @@ export async function getStaticPaths() {
     { params: { tag: "huggingface" } },
     { params: { tag: "flask" } },
     { params: { tag: "math" } },
+    { params: { tag: "docker" } },
+    { params: { tag: "k8s" } },
   ];
 }
 
-const { tag } = Astro.params;
+const { tag: currentTag } = Astro.params;
 const _posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
-const posts = _posts.filter((post) => post.data.tags?.includes(tag));
+const posts = _posts.filter((post) => post.data.tags?.includes(currentTag));
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
-  <body class="max-w-prose m-auto px-4">
+  <body class="px-4">
     <Header />
-    <main>
+    <main class="mx-auto w-full md:w-1/2 px-4">
       <section>
-      <ul>
+        <ul>
           {
             posts.map((post) => (
               <li class="mb-8">
                 <div class="tags">
                   {post.data.tags && post.data.tags.map(tag => (
-                    <a href=`/tags/${tag}`>#{tag}</a>
+                    <a 
+                      href={`/tags/${tag}`}
+                      class={tag === currentTag ? "text-black" : "text-gray-500 font-normal hover:text-black"}
+                    >
+                      #{tag}
+                    </a>
                   ))}
                 </div>
                 <a href={`/${post.slug}/`}>
@@ -49,7 +57,7 @@ const posts = _posts.filter((post) => post.data.tags?.includes(tag));
                 <p class="mb-2 text-gray-600">{post.data.description}</p>
                 <a href={`/${post.slug}/`}>
                   <h2 class = "article-read">Read this article <i class="fa-solid fa-arrow-right"></i></h2>
-                  </a>
+                </a>
               </li>
             ))
           }
@@ -59,3 +67,4 @@ const posts = _posts.filter((post) => post.data.tags?.includes(tag));
     <Footer />
   </body>
 </html>
+

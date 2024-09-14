@@ -1,22 +1,11 @@
 ---
 title: "Making tokenizers faster with rust"
-description: "Playing around with python bindings in rust"
+description: "byte-pair encoding in rust & beating hugging face tokenizers"
 pubDate: "May 10 2024"
 tags: ["rust", "python"]
 ---
 
-**TLDR:** I implempented a BPE tokenizer using Rust and pyo3 which is 4x faster than tokenizers from 🤗 and as fast as OpenAI.
-
-<figure>
-<div style="text-align: center;">
-    <img src="https://github.com/nnethercott/tok/raw/main/performance.png" style="width: 80%; display: block; margin: 0 auto;" >
-      <figcaption>Speed comparison between my tokenizer (yellow) and popular libraries like Hugging Face and OpenAI</figcaption>
-</div>
-</figure>
-
-<!-- Right off the bat, _yes_, this is another post about Rust and ML. More specifically though, it's about -->
-
-In this article I'll run through how I used Rust and [pyo3](https://github.com/PyO3/pyo3) to implement a fast BPE tokenizer which you can install from PyPI today!
+In this article I'll run through how I used Rust and [pyo3](https://github.com/PyO3/pyo3) to implement a fast BPE tokenizer (4x faster than [tokenizers](https://github.com/huggingface/tokenizers) and as fast as [tiktoken](https://github.com/openai/tiktoken)) which you can install from PyPI today!
 
 All the code mentioned in this post can be found on github [at this repo 🪙](https://github.com/nnethercott/tok).
 
@@ -49,15 +38,15 @@ Suppose you've already trained your tokenizer, i.e. you have a hashmap that lets
 The first idea that comes to mind might be to loop over all the possible token merges in the order we learned them and replace any matches we find along the way. For example, if your tokenizer has the following token mapping rules:
 
 ```
-{(97, 97): 256, (256,97): 257, (257, 98): 258}
+{(97, 97): 128, (128,97): 129, (129, 98): 130}
 ```
 
 Then the encoding for "aaabcaaab" (or [97,97,97,98,99,97,97,97,98] as a byte array) would go sequentially like:
 
 ```
-1. [97,97,97,98,99,97,97,97,98] -> [256,97,98,99,256,97,98]
-2. [256,97,98,99,256,97,98] -> [257,98,99,257,98]
-3. [257,98,99,257,98] -> [258,99,258]
+1. [97,97,97,98,99,97,97,97,98] -> [128,97,98,99,128,97,98]
+2. [128,97,98,99,128,97,98] -> [129,98,99,129,98]
+3. [129,98,99,129,98] -> [130,99,130]
 ```
 
 In Rust that procedure can be written as below:
@@ -88,8 +77,8 @@ fn encode(text: &str, map: &HashMap<(Rank,Rank), Rank>) -> Vec<Rank>{
                                       .collect();
 
   //O(m*n)
-  //assume first token has index 256 since we're encoding u8's
-  (256..=reverse_map.len() + 256).rev().for_each(|i| {
+  //assume first token has index 128 since we're encoding for ascii 
+  (128..=reverse_map.len() + 128).rev().for_each(|i| {
       let &pair = reverse_map.get(&(i as Rank)).unwrap();
       _byte_pair_merge(&mut pieces, pair, i as Rank);
   });
@@ -162,6 +151,13 @@ On the same wikitext split our throughput using this encoding algorithm jumps to
 I took a lot of inspiration from official [openai implementation](https://github.com/openai/tiktoken/blob/main/src/lib.rs) in their repo `tiktoken` but handled the merging aspect quite differently by leveraging the fact that we could store the prospective merges in a stack instead of finding the single-best merge at each iteration.
 
 ## PyO3 and the toktokenizer package
+
+<figure>
+<div style="text-align: center;">
+    <img src="https://github.com/nnethercott/tok/raw/main/performance.png" style="width: 80%; display: block; margin: 0 auto;" >
+      <figcaption>Speed comparison between my tokenizer (yellow) and popular libraries like Hugging Face and OpenAI</figcaption>
+</div>
+</figure>
 
 To expose the Rust code in Python I made use of [pyo3](https://github.com/PyO3/pyo3) and [maturin](https://github.com/PyO3/maturin). Getting started with these libraries is incredibly easy and just requires adding a few pyo3 attributes to your existing rust code. What's also nice is that maturin automatically adds a CI github workflow to your project which makes distributing your python package infinitely easier. By default the workflow listens for new tag pushes to the main branch and builds the wheels for all the major platforms.
 

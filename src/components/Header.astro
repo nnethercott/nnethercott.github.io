@@ -1,24 +1,28 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
 import { SITE_TITLE } from "../consts";
+import { PAGE_WIDTH } from '../consts';
 ---
 
 <header>
-  <nav class="flex gap-4 my-16">
+  <div class="flex justify-start">
+    <div class="flex justify-end items-center gap-4 my-16 mx-auto w-full md:w-1/2 px-4">
     <a href="/">
-      <img class="w-28 h-28" src="/logo.jpg" alt="textures" />
-    </a>
+        <img class="w-28 h-28" src="/logo.jpg" alt="textures" />
+      </a>
 
-    <div class="flex flex-col justify-between">
-      <div>
-        <h2 class="text-2xl font-medium"><a>{SITE_TITLE}</a></h2>
-        <p class="text-gray-600">a blog by Nate Nethercott</p>
-      </div>
+      <div class="flex flex-col justify-between ml-auto gap-6">
+        <div>
+          <h2 class="text-2xl font-medium"><a>{SITE_TITLE}</a></h2>
+          <p class="text-gray-600">a blog by Nate Nethercott</p>
+        </div>
 
-      <div class="internal-links">
-        <HeaderLink href="/" class="header-link">blog</HeaderLink>
-        <HeaderLink href="/about" class="header-link">about</HeaderLink>
+        <div class="internal-links">
+          <HeaderLink href="/" class="header-link">blog</HeaderLink>
+          <HeaderLink href="/about" class="header-link">about</HeaderLink>
+        </div>
       </div>
     </div>
-  </nav>
+  </div>
 </header>
+

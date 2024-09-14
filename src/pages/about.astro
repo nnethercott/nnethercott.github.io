@@ -1,16 +1,18 @@
 ---
 import Layout from '../layouts/BlogPost.astro';
 ---
-
 <Layout
-	title="About"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('April 25, 2024')}
-	heroImage="/blog-placeholder-about.jpg"
+  title="About"
+  description="Lorem ipsum dolor sit amet"
+  pubDate={new Date('April 25, 2024')}
+  heroImage="/blog-placeholder-about.jpg"
 >
-<p>Hey! I'm Nate, a machine learning engineer from Canada.</p>
+  <div class="mx-auto max-w-3xl">
+    <p>Hey! I'm Nate, a machine learning engineer from Canada currently based in Paris.</p>
 
-<p>At work I research, train, and quantize llms on tiny compute budgets. These days I'm exploring the ops side of things more and learning how to do scaleable and low-latency ML.</p>
+    <p>I made this blog as a place to share ML-related projects I'm working on and miscellaneous AI or CS concepts I'm learning along the way.</p>
 
-<p>This website is built with <a href="https://astro.build/" style="text-decoration:none">Astro.js</a> and hosted on GitHub pages.</p>
+    <p>Enjoy!</p>
+
+  </div>
 </Layout>
