@@ -31,7 +31,7 @@ A key design choice which helped me to this end was the [grouped query attention
     <img src="https://klu.ai/_next/static/media/what-is-grouped-query-attention-gqa.32669ace.png" style="width: 100%; display: block; margin: 0 auto;">
 </div>
 
-Fun aside, you should read [this blog post](https://mobiusml.github.io/1bit_blog/) and [this paper](https://arxiv.org/abs/2402.17764) to understand what I meant by that comment above^ I'm thinking in the future of manually implementing low bit quantization in my custom llm in the near future and I'd be taking a bunch of inspiration from those papers.
+Fun aside, you should read [this blog post](https://mobiusml.github.io/1bit_blog/) and [this paper](https://arxiv.org/abs/2402.17764) to understand what I meant by that comment above^ I'm thinking in the future of manually implementing low bit quantization in my custom and I'd be taking a bunch of inspiration from those papers.
 
 When you get down to it I think most people with a basic understanding of linear algebra can piece together how SA works and is implemented, since we're just talking about a bunch of linear operations and reshapes. So with that being said i'll drop the code below !
 
