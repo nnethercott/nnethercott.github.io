@@ -30,7 +30,7 @@ const posts = (await getCollection("blog")).sort(
                 ))}
               </div>
               <a href={`/${post.slug}/`}>
-                <h1 class="text-xl font-bold hover:underline">{post.data.title}</h1>
+                <h1 class="text-2xl font-bold hover:underline">{post.data.title}</h1>
               </a>
               <p class="mb-2 text-gray-600">{post.data.description}</p>
               <a href={`/${post.slug}/`} class="text-blue-600 hover:underline flex items-center">
