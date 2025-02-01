@@ -29,11 +29,11 @@ const posts = (await getCollection("blog")).sort(
                   <a href={`/tags/${tag}/`} class="text-black hover:underline">#{tag}</a>
                 ))}
               </div>
-              <a href={`/${post.slug}/`}>
+              <a href={post.data?.url ?? `/${post.slug}/`}>
                 <h1 class="text-2xl font-bold hover:underline">{post.data.title}</h1>
               </a>
               <p class="mb-2 text-gray-600">{post.data.description}</p>
-              <a href={`/${post.slug}/`} class="text-blue-600 hover:underline flex items-center">
+              <a href={post.data?.url ?? `/${post.slug}/`} class="text-blue-600 hover:underline flex items-center">
                   <h2 class = "article-read">Read this article <i class="fa-solid fa-arrow-right"></i></h2>
               </a>
             </li>
