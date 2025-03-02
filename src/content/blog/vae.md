@@ -1,6 +1,6 @@
 ---
 title: 'Spike and slab prior for the VAE'
-description: 'Bayesian statistics 🤝 deep learning'
+description: 'Bayesian statistics x deep learning'
 pubDate: 'Apr 10 2023'
 tags: ["python"]
 ---

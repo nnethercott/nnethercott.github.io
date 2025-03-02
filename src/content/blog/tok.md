@@ -1,15 +1,24 @@
 ---
-title: "Making tokenizers faster with rust"
-description: "byte-pair encoding in rust & beating hugging face tokenizers"
+title: "Fast byte pair encoding in rust"
+description: "Beating hugging face 🤗 tokenizers with rust"
 pubDate: "May 10 2024"
-tags: ["rust", "python"]
+tags: ["rust"]
 ---
 
 In this article I'll run through how I used Rust and [pyo3](https://github.com/PyO3/pyo3) to implement a fast BPE tokenizer (4x faster than [tokenizers](https://github.com/huggingface/tokenizers) and as fast as [tiktoken](https://github.com/openai/tiktoken)) which you can install from PyPI today!
 
 All the code mentioned in this post can be found on github [at this repo 🪙](https://github.com/nnethercott/tok).
 
-_⚠️Disclaimer⚠️_ This article is mainly about an efficient way I discovered to quickly encode and decode sequences using a pretrained tokenizer instead of an in-depth review of byte-pair encoding. For a thorough review of BPE check out any one of these links:
+<figure>
+<div style="text-align: center;">
+    <img src="https://github.com/nnethercott/tok/raw/main/performance.png" style="width: 80%; display: block; margin: 0 auto;" >
+      <figcaption>Speed comparison between my tokenizer (yellow) and popular libraries like Hugging Face and OpenAI</figcaption>
+</div>
+</figure>
+
+
+
+This article is mainly about an efficient way I discovered to quickly encode and decode sequences using a pretrained tokenizer instead of an in-depth review of byte-pair encoding. For a thorough review of BPE check out any one of these links:
 
 - [wikipedia](https://en.wikipedia.org/wiki/Byte_pair_encoding)
 - [hugging face](https://huggingface.co/learn/nlp-course/en/chapter6/5)
@@ -29,9 +38,9 @@ _⚠️Disclaimer⚠️_ This article is mainly about an efficient way I discove
 
 <!-- The "easiest" BPE tokenizer to train is one where we start with numbers 0->255 and build up the vocabulary from there! This saves us from the headache of defining rules for splitting strings into characters, or the type of preprocessing we perform. -->
 
-## Fast encoding algorithm
+## The naive approach - *O(mn)*
 
-Suppose you've already trained your tokenizer, i.e. you have a hashmap that lets you map sequences of bytes to unique tokens. What's the fastest way to use this lookup table to encode and decode your data?
+Suppose you've already trained a tokenizer, i.e. you have an abstracted hashmap that lets you map a sequence of bytes to unique tokens. What's the fastest way to use this lookup table to encode and decode your data?
 
 <!-- ### A basic approach -->
 
@@ -91,9 +100,7 @@ For a vocabulary size of 50257, the token throughput with this approach for a 2.
 
 This approach definitely gets the job done but it's incredibly inefficient! Indeed, this solution has a time complexity of $$O(mn)$$, where $$m$$ is the vocab size and $$n$$ is the length of the text you want to encode. As the vocabulary size and/or length of the text increase we get significant slowdowns :(
 
-<!-- ### A more efficient solution!  -->
-
-_A more efficient solution incoming..._
+## A more efficient solution  - *O(m log(n))*
 
 The approach I ended up stumbling across after around 6 hours of refactoring is closer to $$O(m\log{n})$$. It relies on the fact that we don't need to loop over every entry in the hashmap when it's sufficient to notice that we can apply merges in a way which respects the order the tokenizer learned them in. This lets us apply multiple different token merges in a single pass instead of only searching for a single pattern each time. We can also detect early on if no more token merging is possible and break out of the function.
 
@@ -151,13 +158,6 @@ On the same wikitext split our throughput using this encoding algorithm jumps to
 I took a lot of inspiration from official [openai implementation](https://github.com/openai/tiktoken/blob/main/src/lib.rs) in their repo `tiktoken` but handled the merging aspect quite differently by leveraging the fact that we could store the prospective merges in a stack instead of finding the single-best merge at each iteration.
 
 ## PyO3 and the toktokenizer package
-
-<figure>
-<div style="text-align: center;">
-    <img src="https://github.com/nnethercott/tok/raw/main/performance.png" style="width: 80%; display: block; margin: 0 auto;" >
-      <figcaption>Speed comparison between my tokenizer (yellow) and popular libraries like Hugging Face and OpenAI</figcaption>
-</div>
-</figure>
 
 To expose the Rust code in Python I made use of [pyo3](https://github.com/PyO3/pyo3) and [maturin](https://github.com/PyO3/maturin). Getting started with these libraries is incredibly easy and just requires adding a few pyo3 attributes to your existing rust code. What's also nice is that maturin automatically adds a CI github workflow to your project which makes distributing your python package infinitely easier. By default the workflow listens for new tag pushes to the main branch and builds the wheels for all the major platforms.
 
