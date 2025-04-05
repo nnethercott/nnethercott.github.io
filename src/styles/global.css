@@ -40,13 +40,19 @@
   color: #5999ff;
 }
 
-.tags {
+.meta {
+  display: flex;
+  align-items: center;
   font-size: 0.76em;
-  font-weight: 625;
+  font-weight: 400;
+  gap: 0.75rem;
+  white-space: nowrap;
 }
 
 .tags a {
-  padding-right: 0.65em;
+  /*padding-left: 0.5em;*/
+  padding-right: 0.5em;
+  font-weight: 625;
 }
 
 .tags a:hover {

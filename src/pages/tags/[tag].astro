@@ -13,9 +13,10 @@ export async function getStaticPaths() {
     { params: { tag: "python" } },
     { params: { tag: "huggingface" } },
     { params: { tag: "flask" } },
-    { params: { tag: "math" } },
+    { params: { tag: "ml" } },
     { params: { tag: "docker" } },
     { params: { tag: "k8s" } },
+    { params: { tag: "dart" } },
   ];
 }
 
@@ -37,26 +38,30 @@ const posts = _posts.filter((post) => post.data.tags?.includes(currentTag));
         <ul>
           {
             posts.map((post) => (
-              <li class="mb-8">
-                <div class="tags">
+              <li class="mb-4">
+                <div class="meta">
+                  <div clas="date">
+                  {post.data.pubDate.toLocaleDateString('en-CA', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                  </div>
+
+                  <div class="tags">
                   {post.data.tags && post.data.tags.map(tag => (
-                    <a 
-                      href={`/tags/${tag}`}
-                      class={tag === currentTag ? "text-black" : "text-gray-500 font-normal hover:text-black"}
-                    >
-                      #{tag}
-                    </a>
+                    <a href={`/tags/${tag}/`} class="text-black hover:underline">#{tag}</a>
                   ))}
+                  </div>
                 </div>
-                <a href={`/${post.slug}/`}>
-                  <h1 class="text-2xl font-bold hover:underline">
-                    {post.data.title}
-                  </h1>
+
+                <a href={post.data?.url ?? `/${post.slug}/`}>
+                  <h1 class="text-lg font-bold hover:underline">{post.data.title}</h1>
                 </a>
-                <p class="mb-2 text-gray-600">{post.data.description}</p>
-                <a href={`/${post.slug}/`}>
-                  <h2 class = "article-read">Read this article <i class="fa-solid fa-arrow-right"></i></h2>
-                </a>
+                <!--<p class="mb-2 text-gray-600">{post.data.description}</p>-->
+                <!--<a href={post.data?.url ?? `/${post.slug}/`} class="text-blue-600 hover:underline flex items-center">-->
+                <!--    <h2 class = "article-read">Read this article <i class="fa-solid fa-arrow-right"></i></h2>-->
+                <!--</a>-->
               </li>
             ))
           }

@@ -2,7 +2,7 @@
 title: 'Building a minimal REST API with Phi-3'
 description: 'Creating inference enpoints with flask and llama.cpp'
 pubDate: 'May 03 2024'
-tags: ["python", "flask", "docker"]
+tags: ["python", "docker"]
 ---
 <div style="text-align: center;">
     <img src="https://github.com/nnethercott/nnethercott.github.io/blob/main/src/media/phi3_post/%20convo_demo.png?raw=true" style="width: 100%; display: block; margin: 0 auto;">
@@ -76,6 +76,7 @@ The smallest version of Phi-3, Phi-3-mini-4k-instruct, is about 7.64 GB in its u
 
 Luckily, however, microsoft released a 4bit gguf quant (found [here](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf)) which we can use with existing libraries like llama-cpp-python. Additionally, [microsoft/onnxruntime-genai](https://github.com/microsoft/onnxruntime-genai) provides direction on converting Phi-3 to onnx format in [this readme](https://github.com/microsoft/onnxruntime-genai/blob/main/examples/python/phi-3-tutorial.md). We'll explore both of these options as well as the original unquantized version. 
 
+Here's a gif of the model being served on my computer's CPU (hence the latency)
 <div style="text-align: center;"> <img src="https://github.com/nnethercott/nnethercott.github.io/blob/main/src/media/phi3_post/serving.gif?raw=true" style="width: 100%; display: block; margin: 0 auto;"> </div>
 
 I was hoping to give vllm a shot as our inference engine, but ran into problems in the installation related to [#2411](https://github.com/vllm-project/vllm/issues/2411). Already off to a good start!

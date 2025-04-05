@@ -1,5 +1,5 @@
 ---
-title: "Finally some complicated serde"
+title: "Useful serde"
 description: "godsent serializing in rust"
 pubDate: "March 1 2025"
 tags: ["rust"]
