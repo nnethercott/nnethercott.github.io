@@ -1,8 +1,8 @@
 ---
-title: "Chasing down a memory leak in dart"
+title: "Chasing down a memory leak in flutter"
 description: "garbage collection is fun"
 pubDate: "April 1 2025"
-tags: ["dart"]
+tags: ["dart", "flutter"]
 ---
 
 points:

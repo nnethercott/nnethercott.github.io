@@ -2,7 +2,7 @@
 title: "Fast byte pair encoding in rust"
 description: "Beating hugging face 🤗 tokenizers with rust"
 pubDate: "May 10 2024"
-tags: ["rust"]
+tags: ["rust", "ml"]
 ---
 
 In this article I'll run through how I used Rust and [pyo3](https://github.com/PyO3/pyo3) to implement a fast BPE tokenizer (4x faster than [tokenizers](https://github.com/huggingface/tokenizers) and as fast as [tiktoken](https://github.com/openai/tiktoken)) which you can install from PyPI today!

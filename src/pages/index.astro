@@ -6,6 +6,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import { getCollection } from "astro:content";
 import FormattedDate from "../components/FormattedDate.astro";
 
+// Fetch posts from the collection
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
@@ -16,44 +17,46 @@ const posts = (await getCollection("blog")).sort(
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
-<body class="px-4">
-  <Header />
-  <main>
-    <main class="mx-auto w-full md:w-1/2 px-4">
-      <section>
-        <ul>
-          {posts.map((post) => (
-            <li class="mb-4">
-              <div class="meta">
-                <div clas="date">
-                {post.data.pubDate.toLocaleDateString('en-CA', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
+  <body class="px-4">
+    <Header />
+    <main>
+      <main class="mx-auto w-full md:w-1/2">
+        <section>
+          <ul>
+            {posts.map((post) => (
+              <li class="mb-4 pb-4 border-b border-dashed border-gray-300" key={post.slug}>
+                <a href={post.data?.url ?? `/${post.slug}/`}>
+                  <h1 class="text-2xl font-semibold hover:underline">{post.data.title}</h1>
+                </a>
+
+                <div>
+                  Tags = [
+                  {post.data.tags && post.data.tags.map((tag, index) => (
+                    <span key={tag}>
+                      <a href={`/tags/${tag}/`} class="hover:underline text-blue-600">#{tag}{index < post.data.tags.length - 1 && <span class="text-black">, </span>}</a>
+                    </span>
+                  ))}
+                  ]
                 </div>
 
-                <div class="tags">
-                {post.data.tags && post.data.tags.map(tag => (
-                  <a href={`/tags/${tag}/`} class="text-black hover:underline">#{tag}</a>
-                ))}
-                </div>
-              </div>
+                <p class="mb-2 text-gray-600">{post.data.description}</p>
 
-              <a href={post.data?.url ?? `/${post.slug}/`}>
-                <h1 class="text-lg font-bold hover:underline">{post.data.title}</h1>
-              </a>
-              <!--<p class="mb-2 text-gray-600">{post.data.description}</p>-->
-              <!--<a href={post.data?.url ?? `/${post.slug}/`} class="text-blue-600 hover:underline flex items-center">-->
-              <!--    <h2 class = "article-read">Read this article <i class="fa-solid fa-arrow-right"></i></h2>-->
-              <!--</a>-->
-            </li>
-          ))}
-        </ul>
-      </section>
-    </div>
-  </main>
-  <Footer />
-</body>
+                <div class="flex justify-between">
+                  <p>Posted on {post.data.pubDate.toLocaleDateString('en-CA', {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                  })}</p>
+                  <a href={post.data?.url ?? `/${post.slug}/`} class="text-blue-600 hover:underline flex items-center">
+                      <p class = "article-read">read more</p>
+                  </a>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
+    </main>
+    <Footer />
+  </body>
 </html>
-

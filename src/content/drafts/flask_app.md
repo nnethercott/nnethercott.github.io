@@ -2,7 +2,7 @@
 title: 'Building a minimal REST API with Phi-3'
 description: 'Creating inference enpoints with flask and llama.cpp'
 pubDate: 'May 03 2024'
-tags: ["python", "docker"]
+tags: ["python", "model-serving", "docker", "hugging-face", "ml"]
 ---
 <div style="text-align: center;">
     <img src="https://github.com/nnethercott/nnethercott.github.io/blob/main/src/media/phi3_post/%20convo_demo.png?raw=true" style="width: 100%; display: block; margin: 0 auto;">

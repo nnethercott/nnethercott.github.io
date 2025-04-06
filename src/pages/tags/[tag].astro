@@ -10,13 +10,16 @@ import FormattedDate from "../../components/FormattedDate.astro";
 export async function getStaticPaths() {
   return [
     { params: { tag: "rust" } },
+    { params: { tag: "dart" } },
+    { params: { tag: "flutter" } },
     { params: { tag: "python" } },
-    { params: { tag: "huggingface" } },
-    { params: { tag: "flask" } },
+    { params: { tag: "hugging-face" } },
     { params: { tag: "ml" } },
     { params: { tag: "docker" } },
     { params: { tag: "k8s" } },
-    { params: { tag: "dart" } },
+    { params: { tag: "math" } },
+    { params: { tag: "bayesian" } },
+    { params: { tag: "model-serving" } },
   ];
 }
 
