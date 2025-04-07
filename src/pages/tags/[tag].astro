@@ -28,16 +28,18 @@ const _posts = (await getCollection("blog")).sort(
 );
 const posts = _posts.filter((post) => post.data.tags?.includes(currentTag));
 ---
-<!doctype html>
 <html lang="en">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body class="px-4">
     <Header />
-    <main class="mx-auto w-full md:w-1/2 px-4">
-      <section>
-        <ul>
+      <main class="mx-auto w-full md:w-1/2">
+        <section class="mb-4 pb-4">
+          <h1 class="text-2xl font-semibold">Tags = [ <a href=`/tags/${currentTag}/` class="text-blue-700">#{currentTag} </a>]</h1>
+        </section>
+        <section>
+          <ul>
             {posts.map((post) => (
               <li class="mb-4 pb-4 border-b border-dashed border-gray-300">
                 <a href={post.data?.url ?? `/${post.slug}/`}>
@@ -70,10 +72,9 @@ const posts = _posts.filter((post) => post.data.tags?.includes(currentTag));
                 </div>
               </li>
             ))}
-        </ul>
-      </section>
-    </main>
+          </ul>
+        </section>
+      </main>
     <Footer />
   </body>
 </html>
-
