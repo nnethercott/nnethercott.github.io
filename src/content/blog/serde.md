@@ -1,6 +1,6 @@
 ---
 title: "Useful serde"
-description: "godsent serializing in rust"
+description: "Some macros syntax for convenient serialization in rust"
 pubDate: "March 6 2025"
 tags: ["rust"]
 ---

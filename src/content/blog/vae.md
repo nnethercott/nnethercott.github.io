@@ -1,12 +1,12 @@
 ---
 title: 'Sparse variational autoencoders'
-description: 'Bayesian statistics x deep learning'
+description: 'Playing around with bayesian priors and deep learning'
 pubDate: 'Apr 10 2023'
 tags: ["python", "ml", "math", "bayesian"]
 ---
 **tl;dr:** I used a <a href="https://en.wikipedia.org/wiki/Spike-and-slab_regression">spike-and-slab</a> prior instead of the unit gaussian to model the latent distribution of a variational autoencoder. 
 <div style="text-align: center;">
-    <img src="https://github.com/nnethercott/nnethercott.github.io/blob/main/src/media/vae_post/mnist.gif?raw=true" style="width: 50%; display: block; margin: 0 auto;">
+    <img src="/media/vae_post/mnist.gif" style="width: 50%; display: block; margin: 0 auto;">
 </div>
 
 
@@ -121,14 +121,14 @@ With everything in place we can train the model quickly and visualize the result
 When you train the model you still get a VAE which can produce realistic generations like the ones below, even if we're using a lossy encoder.  
 
 <div style="text-align: center;">
-    <img src="https://github.com/nnethercott/nnethercott.github.io/blob/main/src/media/vae_post/sparse_recon.png?raw=true" style="width: 100%; display: block; margin: 0 auto;">
+    <img src="/media/vae_post/sparse_recon.png" style="width: 100%; display: block; margin: 0 auto;">
 </div>
 <em>Generations for a VAE with spike and slab prior; latent_dim=10, p=0.8, c^2 = 0.05</em>
 
 What's different about this model and the normal VAE is that when we encode images we only have a few non-zero components in the embedding representation.  If the embedding space is $$d$$-dimensional we expect the model to activate only $$p*d$$ dimensions after training, which we can see by looking at the image below:
 
 <div style="text-align: center;">
-    <img src="https://github.com/nnethercott/nnethercott.github.io/blob/main/src/media/vae_post/latent_vis.png?raw=true" style="width: 100%; display: block; margin: 0 auto;">
+    <img src="/media/vae_post/latent_vis.png" style="width: 100%; display: block; margin: 0 auto;">
 </div>
 <em>Each subplot shows the latent representation for a different sample image using the trained model. 
 </em>

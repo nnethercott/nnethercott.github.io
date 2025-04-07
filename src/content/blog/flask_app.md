@@ -5,7 +5,7 @@ pubDate: 'May 03 2024'
 tags: ["python", "model-serving", "docker", "hugging-face", "ml"]
 ---
 <div style="text-align: center;">
-    <img src="https://github.com/nnethercott/nnethercott.github.io/blob/main/src/media/phi3_post/%20convo_demo.png?raw=true" style="width: 100%; display: block; margin: 0 auto;">
+    <img src="/media/phi3_post/convo_demo.png" style="width: 100%; display: block; margin: 0 auto;">
 </div>
 
 [Phi-3](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct) is the most recent LLM release from Microsoft. In this version the creators chose to use similar blocks to Llama2 so that it could integrate seamlessly into existing frameworks and also kept it small enough (3.8b params) to be feasible to run on consumer CPUs while still outperforming models twice its size. 
@@ -26,7 +26,7 @@ In the subsequent sections I'll run through how I used each of these as we build
 ## API Design 
 There's already a lot of projects out there which streamline building APIs with LLM chat endpoints - [vllm](https://github.com/vllm-project/vllm), [text-generation-webui](https://github.com/oobabooga/text-generation-webui), and [ollama](https://ollama.com/) to name a few. All of these are really great and allow for serving various model formats flexibly, but here we'll be building a simplified version with the bare necessities. 
 
-<div style="text-align: center;"> <img src="https://github.com/nnethercott/nnethercott.github.io/blob/main/src/media/phi3_post/rest_api.png?raw=true" style="width: 90%; display: block; margin: 0 auto;"> </div>
+<div style="text-align: center;"> <img src="/media/phi3_post/rest_api.png" style="width: 90%; display: block; margin: 0 auto;"> </div>
 
 The API will consist of one chat endpoint (`/chat/completions`) supporting GET and POST requests. POST requests are how we perform inference with the hosted LLM while the GET route handler will render the conversation history. We'll also make use of Redis to cache the outputs of expensive API calls. 
 
@@ -77,7 +77,7 @@ The smallest version of Phi-3, Phi-3-mini-4k-instruct, is about 7.64 GB in its u
 Luckily, however, microsoft released a 4bit gguf quant (found [here](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf)) which we can use with existing libraries like llama-cpp-python. Additionally, [microsoft/onnxruntime-genai](https://github.com/microsoft/onnxruntime-genai) provides direction on converting Phi-3 to onnx format in [this readme](https://github.com/microsoft/onnxruntime-genai/blob/main/examples/python/phi-3-tutorial.md). We'll explore both of these options as well as the original unquantized version. 
 
 Here's a gif of the model being served on my computer's CPU (hence the latency)
-<div style="text-align: center;"> <img src="https://github.com/nnethercott/nnethercott.github.io/blob/main/src/media/phi3_post/serving.gif?raw=true" style="width: 100%; display: block; margin: 0 auto;"> </div>
+<div style="text-align: center;"> <img src="/media/phi3_post/serving.gif" style="width: 100%; display: block; margin: 0 auto;"> </div>
 
 I was hoping to give vllm a shot as our inference engine, but ran into problems in the installation related to [#2411](https://github.com/vllm-project/vllm/issues/2411). Already off to a good start!
 
@@ -375,7 +375,7 @@ curl -H 'Content-Type: application/json' -X POST -d '{"messages": [{"role": "use
 After a few seconds you should be able to see your question and the llm response in-browser at `localhost:4440/chat/completions/`
 
 <div style="text-align: center;">
-    <img src="https://github.com/nnethercott/nnethercott.github.io/blob/main/src/media/phi3_post/jinja_section.png?raw=true" style="width: 100%; display: block; margin: 0 auto;">
+    <img src="/media/phi3_post/jinja_section.png" style="width: 100%; display: block; margin: 0 auto;">
 </div>
 
 ## Dockerizing 

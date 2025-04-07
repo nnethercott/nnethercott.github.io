@@ -1,6 +1,6 @@
 ---
 title: "Fast byte pair encoding in rust"
-description: "Beating hugging face 🤗 tokenizers with rust"
+description: "An O(log n) optimization I found to speed up tokenizer throughput"
 pubDate: "May 10 2024"
 tags: ["rust", "ml"]
 ---
@@ -11,7 +11,7 @@ All the code mentioned in this post can be found on github [at this repo 🪙](h
 
 <figure>
 <div style="text-align: center;">
-    <img src="https://github.com/nnethercott/tok/raw/main/performance.png" style="width: 80%; display: block; margin: 0 auto;" >
+    <img src="/media/tok_post/performance.png" style="width: 80%; display: block; margin: 0 auto;" >
       <figcaption>Speed comparison between my tokenizer (yellow) and popular libraries like Hugging Face and OpenAI</figcaption>
 </div>
 </figure>
