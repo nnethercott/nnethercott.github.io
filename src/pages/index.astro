@@ -33,7 +33,7 @@ const posts = (await getCollection("blog")).sort(
                   Tags = [
                   {post.data.tags && post.data.tags.map((tag, index) => (
                     <span key={tag}>
-                      <a href={`/tags/${tag}/`} class="hover:underline text-blue-600">#{tag}{index < post.data.tags.length - 1 && <span class="text-black">, </span>}</a>
+                      <a href={`/tags/${tag}/`} class="hover:underline text-blue-600">#{tag}{index < post.data.tags.length - 1 && <span class="text-gray-600">, </span>}</a>
                     </span>
                   ))}
                   ]
