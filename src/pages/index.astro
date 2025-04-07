@@ -31,9 +31,12 @@ const posts = (await getCollection("blog")).sort(
                   Tags = [
                     {post.data?.tags ? 
                       post.data.tags.map((tag, index) => (
-                        <a href={`/tags/${tag}/`} class="hover:underline text-blue-600">
-                          #{tag}{index < (post.data.tags?.length ?? 0) - 1 && <span class="text-gray-600">, </span>}
-                        </a>
+                        <>{/* Use fragment to avoid extra elements */}
+                          <a href={`/tags/${tag}/`} class="hover:underline text-blue-600">#{tag}</a>{/* No space */}
+                          {index < (post.data.tags?.length ?? 0) - 1 && 
+                            <span class="text-gray-600">,&nbsp;</span>
+                          }
+                        </>
                       )) : null
                     }
                   ]
@@ -48,7 +51,7 @@ const posts = (await getCollection("blog")).sort(
                     day: 'numeric',
                   })}</p>
                   <a href={post.data?.url ?? `/${post.slug}/`} class="text-blue-600 hover:underline flex items-center">
-                      <p class = "article-read">read more</p>
+                    <p class = "article-read">read more</p>
                   </a>
                 </div>
               </li>

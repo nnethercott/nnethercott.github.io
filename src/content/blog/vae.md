@@ -1,6 +1,6 @@
 ---
 title: 'Sparse variational autoencoders'
-description: 'Playing around with bayesian priors and deep learning'
+description: 'Playing around with bayesian priors and deep learning 🎲'
 pubDate: 'Apr 10 2023'
 tags: ["python", "ml", "math", "bayesian"]
 ---

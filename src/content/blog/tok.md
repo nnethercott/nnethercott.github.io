@@ -1,6 +1,6 @@
 ---
 title: "Fast byte pair encoding in rust"
-description: "An O(log n) optimization I found to speed up tokenizer throughput"
+description: "An O(log n) optimization I found to speed up tokenizer throughput 🏎️💨"
 pubDate: "May 10 2024"
 tags: ["rust", "ml"]
 ---

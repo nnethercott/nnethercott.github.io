@@ -50,9 +50,12 @@ const posts = _posts.filter((post) => post.data.tags?.includes(currentTag));
                   Tags = [
                     {post.data?.tags ? 
                       post.data.tags.map((tag, index) => (
-                        <a href={`/tags/${tag}/`} class="hover:underline text-blue-600">
-                          #{tag}{index < (post.data.tags?.length ?? 0) - 1 && <span class="text-gray-600">, </span>}
-                        </a>
+                        <>{/* Use fragment to avoid extra elements */}
+                          <a href={`/tags/${tag}/`} class="hover:underline text-blue-600">#{tag}</a>{/* No space */}
+                          {index < (post.data.tags?.length ?? 0) - 1 && 
+                            <span class="text-gray-600">,&nbsp;</span>
+                          }
+                        </>
                       )) : null
                     }
                   ]
