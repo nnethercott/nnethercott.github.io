@@ -1,20 +1,18 @@
 ---
-title: 'Spike and slab prior for the VAE'
+title: 'Sparse variational autoencoders'
 description: 'Bayesian statistics x deep learning'
 pubDate: 'Apr 10 2023'
-tags: ["python"]
+tags: ["python", "ml", "math", "bayesian"]
 ---
-
+**tl;dr:** I used a <a href="https://en.wikipedia.org/wiki/Spike-and-slab_regression">spike-and-slab</a> prior instead of the unit gaussian to model the latent distribution of a variational autoencoder. 
 <div style="text-align: center;">
     <img src="https://github.com/nnethercott/nnethercott.github.io/blob/main/src/media/vae_post/mnist.gif?raw=true" style="width: 50%; display: block; margin: 0 auto;">
 </div>
 
-**TLDR:** I used a <a href="https://en.wikipedia.org/wiki/Spike-and-slab_regression">spike-and-slab</a> prior instead of the unit gaussian to model the latent distribution of a variational autoencoder. 
-
 
 ## Theory 
 
-Before diving into it, I thought I'd mention that I've included a quick refresher on the math behind VAEs at the end of this article ifyou're feeling rusty ;) 
+Before diving into it, I thought I'd mention that I've included a quick refresher on the math behind VAEs at the end of this article if you're feeling rusty ;) 
 
 The main idea is to assume a prior on the latent space where each latent, $$z_{i}$$,
 of the encoded sample, $$x$$, has some probability, $$p$$
