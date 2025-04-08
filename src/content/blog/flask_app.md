@@ -1,6 +1,6 @@
 ---
 title: 'Building a minimal REST API with Phi-3'
-description: 'Creating inference enpoints with flask and llama.cpp 👨🏻‍💻'
+description: 'Creating inference enpoints with flask and llama.cpp'
 pubDate: 'May 03 2024'
 tags: ["python", "model-serving", "docker", "hugging-face", "ml"]
 ---

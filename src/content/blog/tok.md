@@ -1,6 +1,6 @@
 ---
 title: "Fast byte pair encoding in rust"
-description: "An O(log n) optimization I found to speed up tokenizer throughput 🏎️💨"
+description: "An O(log n) optimization I found to speed up tokenizer throughput"
 pubDate: "May 10 2024"
 tags: ["rust", "ml"]
 ---
@@ -18,10 +18,10 @@ All the code mentioned in this post can be found on github [at this repo 🪙](h
 
 
 
-This article is mainly about an efficient way I discovered to quickly encode and decode sequences using a pretrained tokenizer instead of an in-depth review of byte-pair encoding. For a thorough review of BPE check out any one of these links:
+I'm mainly going to write about an efficient way I discovered to quickly encode and decode sequences using a pretrained tokenizer instead of an in-depth review of byte-pair encoding. For a thorough review of BPE check out any one of these links:
 
 - [wikipedia](https://en.wikipedia.org/wiki/Byte_pair_encoding)
-- [hugging face](https://huggingface.co/learn/nlp-course/en/chapter6/5)
+- [huggingface blog post](https://huggingface.co/learn/nlp-course/en/chapter6/5)
 - [tiktoken readme](https://github.com/openai/tiktoken)
 
 <!-- I figured it would be fun to manually implement the building blocks of modern NLP from scratch, and with that said there's no better place to start than with the tokenizer. To that end, I turned to Rust as my language of choice to  -->
@@ -98,7 +98,7 @@ fn encode(text: &str, map: &HashMap<(Rank,Rank), Rank>) -> Vec<Rank>{
 
 For a vocabulary size of 50257, the token throughput with this approach for a 2.5MB subset of the [wikitext dataset](https://huggingface.co/datasets/wikitext) is somewhere in the neighborhood of **0.09MB/s**.
 
-This approach definitely gets the job done but it's incredibly inefficient! Indeed, this solution has a time complexity of $$O(mn)$$, where $$m$$ is the vocab size and $$n$$ is the length of the text you want to encode. As the vocabulary size and/or length of the text increase we get significant slowdowns :(
+This approach definitely gets the job done but it's incredibly inefficient! Indeed, this solution has a time complexity of $$O(mn)$$, where $$m$$ is the vocab size and $$n$$ is the length of the text you want to encode. As the vocabulary size and/or length of the text increase we get significant slowdowns.
 
 ## A more efficient solution  - *O(m log(n))*
 

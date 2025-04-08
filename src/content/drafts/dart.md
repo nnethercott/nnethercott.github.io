@@ -1,6 +1,6 @@
 ---
-title: "Chasing down a memory leak in flutter"
-description: "garbage collection is fun"
+title: "Improving model encryption on mobile"
+description: "Some optimizations made for more performant cryptography operations"
 pubDate: "April 1 2025"
 tags: ["dart", "flutter"]
 ---

@@ -1,6 +1,6 @@
 ---
 title: 'Training LLaVA on GPT-4 annotated data'
-description: 'Boosting OCR performances of open-source vision language models with synthetic datasets 👾'
+description: 'Boosting OCR performances of open-source vision language models with synthetic datasets'
 pubDate: 'Mar 20 2024'
 tags: ["python", "ml"]
 ---
