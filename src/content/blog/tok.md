@@ -18,7 +18,7 @@ All the code mentioned in this post can be found on github [at this repo 🪙](h
 
 
 
-I'm mainly going to write about an efficient way I discovered to quickly encode and decode sequences using a pretrained tokenizer instead of an in-depth review of byte-pair encoding. For a thorough review of BPE check out any one of these links:
+I'm mainly going to write about an efficient way I discovered to quickly encode and decode sequences using a pretrained tokenizer instead of an in-depth review of byte-pair encoding. For that check out any one of these links:
 
 - [wikipedia](https://en.wikipedia.org/wiki/Byte_pair_encoding)
 - [huggingface blog post](https://huggingface.co/learn/nlp-course/en/chapter6/5)
@@ -40,7 +40,7 @@ I'm mainly going to write about an efficient way I discovered to quickly encode 
 
 ## The naive approach - *O(mn)*
 
-Suppose you've already trained a tokenizer, i.e. you have an abstracted hashmap that lets you map a sequence of bytes to unique tokens. What's the fastest way to use this lookup table to encode and decode your data?
+Suppose you've already trained a tokenizer, i.e. you have a wrapper around a hashmap that lets you map a sequence of bytes to unique tokens. What's the fastest way to use this lookup table to encode and decode your data?
 
 <!-- ### A basic approach -->
 
@@ -52,11 +52,9 @@ The first idea that comes to mind might be to loop over all the possible token m
 
 Then the encoding for "aaabcaaab" (or [97,97,97,98,99,97,97,97,98] as a byte array) would go sequentially like:
 
-```
 1. [97,97,97,98,99,97,97,97,98] -> [128,97,98,99,128,97,98]
 2. [128,97,98,99,128,97,98] -> [129,98,99,129,98]
 3. [129,98,99,129,98] -> [130,99,130]
-```
 
 In Rust that procedure can be written as below:
 
