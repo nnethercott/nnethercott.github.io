@@ -10,9 +10,9 @@ At first I didn't really understand the hype around [serde](https://serde.rs/) (
     <img src="/media/serde_post/graphic.png" style="width: 50%; display: block; margin: 0 auto;">
 </div>
 
-The specific problem I was dealing with was reading and writing tokenizers from disk after training them on a dataset. Depending on the size of the corpus, training can time-intensive process and we'd like to cache the work after we're done to reload later or share with others. 
+Depending on the size of the corpus, training a tokenizer can be a  time-intensive process, and we'd ideally like to cache the work after we're done to reload later or share with others. For my project supporting reading and writing of tokenizers to disk was non-negociable.
 
-At its core, a tokenizer is basically a wrapper around a HashMap storing rules for merging substrings, and because of this they can have memory footprints that are non-trivially large. For example, gpt2 with a vocabulary size of only ~50k needs a tokenizer taking up nearly 1.4 MB -- today models have vocabularies nearly 3x that. When serializing a tokenizer we need to consider this memory cost and only keep what's absolutely necessary for deserialization.
+At its core, a tokenizer is basically a wrapper around a HashMap storing rules for merging substrings, and because of this they can have memory footprints that are non-trivially large. For example, gpt2 with a vocabulary size of only ~50k needs a tokenizer taking up nearly 1.4 MB -- today's models have vocabularies nearly 3x that. When serializing a tokenizer we need to consider this memory cost and only keep what's absolutely necessary for deserialization.
 
 Consider the code below outlining the interface of a tokenizer -- if it seems confusing, don't worry we'll go through it together.
 ```rust 
@@ -70,7 +70,7 @@ and
 
 An important caveat about the last one; in order for **#[serde(default)]** to work the field needs to implement the [default trait](https://doc.rust-lang.org/std/default/trait.Default.html) !
 
-While serde supports HashMaps with heterogeneous key-value pairs -- including (u32,u32) tuples like the BPETokenizer.encoder -- [serde-json](https://github.com/serde-rs/json) does not. Serializing to valid json restricts us to maps with **string keys only**. That's why the `special_tokens_map` of the `TokenizerConfig` is already good as is. We could instead use another format like CBOR and it would work as is, but we lose out on readability (and I wouldn't have content for my blog).
+While serde supports HashMaps with heterogeneous key-value pairs -- including (u32,u32) tuples like the BPETokenizer.encoder -- [serde-json](https://github.com/serde-rs/json) does not. Serializing to valid json restricts us to maps with **string keys only**. That's why the `special_tokens_map` of the `TokenizerConfig` is already good as is. We could instead use another format like CBOR through crates such as [serde-cbor](https://docs.rs/serde_cbor/latest/serde_cbor/) and it would work as is, but we lose out on readability (and I wouldn't have content for my blog).
 
 In Python we could normally do a quick: 
 

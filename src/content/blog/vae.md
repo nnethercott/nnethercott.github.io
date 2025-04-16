@@ -4,7 +4,7 @@ description: 'Playing around with bayesian priors and deep learning'
 pubDate: 'Apr 10 2023'
 tags: ["python", "ml", "math", "bayesian"]
 ---
-**tl;dr:** I used a <a href="https://en.wikipedia.org/wiki/Spike-and-slab_regression">spike-and-slab</a> prior instead of the unit gaussian to model the latent distribution of a variational autoencoder. 
+**tl;dr:** Using a <a href="https://en.wikipedia.org/wiki/Spike-and-slab_regression">spike-and-slab</a> prior instead of the unit gaussian to model the latent distribution of a variational autoencoder. 
 <div style="text-align: center;">
     <img src="/media/vae_post/mnist.gif" style="width: 50%; display: block; margin: 0 auto;">
 </div>
