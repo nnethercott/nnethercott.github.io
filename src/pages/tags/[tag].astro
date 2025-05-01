@@ -9,6 +9,7 @@ import { getCollection } from "astro:content";
 export async function getStaticPaths() {
   return [
     { params: { tag: "rust" } },
+    { params: { tag: "cargo" } },
     { params: { tag: "dart" } },
     { params: { tag: "flutter" } },
     { params: { tag: "python" } },
